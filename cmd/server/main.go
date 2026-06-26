@@ -48,7 +48,7 @@ func main() {
 		}
 		switch words[0] {
 		case "pause":
-			fmt.Printf("Publishing paused game state")
+			fmt.Println("Publishing paused game state")
 			err = pubsub.PublishJSON(
 				publishCh,
 				routing.ExchangePerilDirect,
@@ -61,7 +61,7 @@ func main() {
 				log.Fatalf("could not publish to channel: %v", err)
 			}
 		case "resume":
-			fmt.Printf("Publishing resume game state")
+			fmt.Println("Publishing resume game state")
 			err = pubsub.PublishJSON(
 				publishCh,
 				routing.ExchangePerilDirect,
