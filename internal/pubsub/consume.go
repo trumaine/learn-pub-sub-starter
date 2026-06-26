@@ -9,17 +9,17 @@ import (
 
 type Acktype int
 
-const (
-	Ack Acktype = iota
-	NackRequeue
-	NackDiscard
-)
-
 type SimpleQueueType int
 
 const (
 	SimpleQueueDurable SimpleQueueType = iota
 	SimpleQueueTransient
+)
+
+const (
+	Ack Acktype = iota
+	NackRequeue
+	NackDiscard
 )
 
 func SubscribeJSON[T any](
@@ -61,17 +61,17 @@ func SubscribeJSON[T any](
 			if err != nil {
 				fmt.Printf("could not unmarshal message: %v\n", err)
 			}
-			ack := handler(target)
-			switch ack {
+			ackResponse := handler(target)
+			switch ackResponse {
 			case Ack:
 				msg.Ack(false)
-				fmt.Printf("message acknowledged")
+				fmt.Println("Ack")
 			case NackRequeue:
 				msg.Nack(false, true)
-				fmt.Printf("message not acknowledged and requeued")
+				fmt.Println("NackRequeue")
 			case NackDiscard:
 				msg.Nack(false, false)
-				fmt.Printf("message not acknowledged and discarded")
+				fmt.Println("NackDiscard")
 			}
 		}
 	}()
@@ -96,7 +96,9 @@ func DeclareAndBind(
 		queueType != SimpleQueueDurable, // auto-delete
 		queueType != SimpleQueueDurable, // exclusive
 		false,                           // noWait
-		nil,
+		amqp.Table{
+			"x-dead-letter-exchange": "peril_dlx",
+		},
 	)
 	if err != nil {
 		return nil, amqp.Queue{}, fmt.Errorf("could not declare queue: %v", err)
