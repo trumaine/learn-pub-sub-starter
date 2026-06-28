@@ -54,7 +54,7 @@ func handlerWar(gs *gamelogic.GameState, publishCh *amqp.Channel) func(gamelogic
 			err := publishGameLog(
 				publishCh,
 				gs.GetUsername(),
-				fmt.Sprintf("%s won a war against %s", winner, loser),
+				fmt.Sprintf("%s lost a war against %s", loser, winner),
 			)
 			if err != nil {
 				fmt.Printf("error: %s\n", err)
@@ -76,7 +76,7 @@ func handlerWar(gs *gamelogic.GameState, publishCh *amqp.Channel) func(gamelogic
 			err := publishGameLog(
 				publishCh,
 				gs.GetUsername(),
-				fmt.Sprintf("A war between %s and %s resulted in a dr", winner, loser),
+				fmt.Sprintf("A war between %s and %s resulted in a draw", winner, loser),
 			)
 			if err != nil {
 				fmt.Printf("error: %s\n", err)
