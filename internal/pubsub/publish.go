@@ -19,7 +19,7 @@ func publish[T any](ch *aqmp.Channel, exchange, key string, val T, marshaller fu
 }
 
 func PublishJSON[T any](ch *aqmp.Channel, exchange, key string, val T) error {
-	return publish[T](
+	return publish(
 		ch,
 		exchange,
 		key,
@@ -35,7 +35,7 @@ func PublishJSON[T any](ch *aqmp.Channel, exchange, key string, val T) error {
 }
 
 func PublishGob[T any](ch *aqmp.Channel, exchange, key string, val T) error {
-	return publish[T](
+	return publish(
 		ch,
 		exchange,
 		key,
